@@ -1,0 +1,14 @@
+# Node
+node_modules/
+dist/
+.build/
+# Python
+__pycache__/
+.venv/
+.env
+# Unity/General
+Library/
+Temp/
+Build/
+*.log
+.DS_Store

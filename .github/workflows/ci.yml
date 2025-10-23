@@ -1,0 +1,53 @@
+name: CI
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Node (client-ui) - only if the folder exists
+      - name: Setup Node (client-ui)
+        if: ${{ hashFiles('client-ui/package.json') != '' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install deps (client-ui)
+        if: ${{ hashFiles('client-ui/package.json') != '' }}
+        run: npm ci --prefix client-ui
+
+      - name: Test (client-ui)
+        if: ${{ hashFiles('client-ui/package.json') != '' }}
+        run: npm test --prefix client-ui --if-present
+
+      # Python (drone-service) - only if requirements.txt exists
+      - name: Setup Python (drone-service)
+        if: ${{ hashFiles('drone-service/requirements.txt') != '' }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install deps (drone-service)
+        if: ${{ hashFiles('drone-service/requirements.txt') != '' }}
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r drone-service/requirements.txt
+
+      - name: Lint/Test (drone-service)
+        if: ${{ hashFiles('drone-service/requirements.txt') != '' }}
+        run: |
+          if [ -f "drone-service/pytest.ini" ] || [ -d "drone-service/tests" ]; then
+            python -m pytest drone-service
+          else
+            echo "No Python tests configured; skipping."
+          fi
+
+      # NOTE: Unity importer & photogrammetry steps can be added later with self-hosted runners.
