@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mapbox Viewer</title>
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div id="token-banner" role="alert" aria-live="assertive" hidden>
+      No Mapbox token set. Set MAPBOX_TOKEN in /client-ui/.env
+    </div>
+    <header class="toolbar" role="toolbar" aria-label="Map controls">
+      <button id="btn-address" type="button" aria-label="Type an address">Type Address</button>
+      <button id="btn-current" type="button" aria-label="Use current location">Use Current Location</button>
+      <button id="btn-default" type="button" aria-label="Reset map view">View Map</button>
+      <input id="address-input" type="search" placeholder="Search for an address" aria-label="Address search" hidden />
+    </header>
+    <main>
+      <div id="map" role="region" aria-label="Map display"></div>
+      <div id="status-area" aria-live="polite">Ready.</div>
+      <div id="toast" role="status" aria-live="assertive" hidden></div>
+    </main>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
